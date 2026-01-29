@@ -1,0 +1,189 @@
+@startuml
+
+class Location{
++int: xLocation
++int: yLocation
++bool: beyondPlain
++moveBy(double xMoveBy, double yMoveBy)
++void: setX(int: xSet)
++void: setY(int: ySet)
++int: getX()
++int: getY()
+}
+
+class MovingThing{
++int: typeOfMovement
++double: xVelocityMovement
++double: yVelocityMovement
++double: xAccelerationVelocity
++double: yAccelerationVelocity
++double: aSinusAmplitude
++double: bSinusPeriodFactor
++double: ySinusMovement
++boolean: presentInGame
++int[]: getLocation()
++void: performActions(int: 4x Boundaries, 2x cycle Counter)
++void: performSinusMovement(2x cycle Counter)
++void: performVelocityMovement()
++void: performReflectionOnBoundary(int: xMinusBoundary, int: xPlusBoundary, int y...)
++void: performTeleportOnBoundary(int: xMinusBoundary, int: xPlusBoundary, int y...)
+}
+class MainGame{
++int: spielfeldHoehe
++int: spielfeldBreite
++int: terminalScale
++TextColor: defaultBackColor
++TextColor defaultTextColor
+
++main() #gameTesting purposes
+sleep(int miliseconds)(not present; might improve time accuracy and consistency)
+----
+main() has/ calls:
+....
+ArrayList<Target>: targets
+int: maxCycleCount
+int: cycleCount
+PixelArtLibrary: pixelArtLibrary
+Spielfeld: spielfeld
+Score: scoreDisplay
+Health: healthDisplay
+multiple Targets
+TerminalFactory: factory
+Terminal: terminal
+Renderer: renderer (terminal)
+Keystroke: input
+void: spielfeld.clear()
+void: renderer.render(spielfeld)
+void: healthDisplay.draw(spielfeld)
+int: healthDisplay.getCurrentHealth()
+void: healthDisplay.decrease(int)
+void: healthDisplay.update()
+void: scoreDispoaly.draw(spielfeld)
+void: scoreDisplay.increase(int)
+void: scoreDisplay.setPosition()
+void: target.performAction(s)(4x boundaries, 2x cycleCount)
+void: target.drawFly()
+void: terminal.clearScreen()
+void: terminal.flush()
+void: terminal.close()
+}
+
+class Health{
+-int: startX
+-int: startY
+-int: spacing
+-PixelArtLibrary: pixelArtLibrary
+-int: currentHealth
+-int: maxHealth
+-PixelArt: fullHeart
+-PixelArt: halfHeart
+-boolean: isAnimating
+-int: animationFrames
++decrease(int damage)
++int: getCurrentHealth()
++update()
++draw(spielfeld)
+}
+
+class Pixel{
++char: Text
++TextColor: textColor
++TextColor: backColor
+}
+class PixelArt{
+-int[][]:pattern
+-TextColor[]: colorPalette
+-String: name
++String: getName()
++int[][]: getPattern()
++TextColor: getColor(int:colorIndex)
+}
+class PixelArtLibrary{
+-Map<String, PixelArt>: pixelArts
+-initializePixelArts()
++getPixelArt(String:key)
+}
+class Renderer{
+-Terminal: terminal
++render(spielfeld)
++Terminal: getTerminal()
+}
+class Score{
+-int: startX
+-int: startY
+-int: spacing
+-PixelArtLibrary: pixelArtLibrary
+-PixelArt: numbers[]
+-int: currentScore
++increase(int:points)
++setPosition(int:newX, newY)
++int: getCurrentScore()
++draw(spielfeld)
+}
+class Spielfeld{
++int: width
++int: height
++Pixel[][]: pixelArts
++TextColor: defaultBackColor
++TextColor: defaultTextColor
+-initializePixels()
++clear()
++drawPixelArt(pixelArt, int:startX, startY)
++int: getWidth()
++int: getHeight()
++Pixel[][]: getPixels
+}
+class Target {
+-PixelArtLibrary: pixelArtLibrary
+-PixelArt: flyArt
+-PixelArt: beeArt
+#super()
++drawFly(spielfeld)
++drawBee(spielfeld)
+}
+
+
+
+MovingThing *-- "1" Location
+MovingThing <|- Target :extends
+Health --o PixelArtLibrary
+Health --o PixelArt
+
+
+Spielfeld -o Pixel
+
+Renderer ..> Spielfeld: renders
+Target ..> Spielfeld: draws  to
+PixelArt <. Spielfeld: draws
+Score ..> Spielfeld: draws to
+Health ..> Spielfeld: draws to
+
+
+Score --o PixelArtLibrary
+Score --o PixelArt
+
+Target --o PixelArt
+Target --o PixelArtLibrary
+
+MainGame "main()calls/has" ..o Target
+MainGame "main()calls/has" ..o PixelArtLibrary
+MainGame "main()calls/has" ..o Spielfeld
+MainGame "main()calls/has" ..o Score
+MainGame "main()calls/has" ..o Health
+lanterna.Terminal o. "main()calls/has" MainGame
+lanterna.Keystroke o.. "main()calls/has "MainGame
+
+lanterna.TextColor o-- Pixel
+lanterna.Terminal o-- Renderer
+lanterna.TextColor o- MainGame
+PixelArt -o lanterna.TextColor
+Spielfeld -o lanterna.TextColor
+
+
+
+MainGame "main()calls/has" ..o Renderer
+
+PixelArtLibrary -o PixelArt
+note "hope good arrow usage" as N1
+
+@enduml

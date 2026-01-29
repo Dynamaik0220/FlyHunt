@@ -1,0 +1,43 @@
+
+-creating new thing: new Thing(initial pos.: -x; -y; Velocity: -x; -y; Acceleration: -x; -y; aSinusAmplitude; bSinusPeriodFactor; movementType
+    -aSinusAmplitude: Amplitude of sin curve
+    -bSinusPeriodFactor: b factor: lower b factor-->bigger period;
+
+
+
+-Thing:
+    -int: typeOfMovement =  0) stationary: thing wont move
+                            1) move thing, but when thing reaches boundary dont teleport or reflect but set presentInGame to false; wont delete thing, has to be done from list(currently); notice: primitiveDraw will fail tying to render things outside plain
+                            2)Teleport: upon reaching boundry thing will teleport to opposite boundary (in one dimension)
+                            3)Reflect: when reaching boundry reverse velocity (in one dimension)
+                            4)Sinus Movement and Teleport: a (Amplitude) and b (factor within () of sinus function) are to be added through thing constructor
+                            5)Sinus Movement and Reflect: -||-
+    +double: xVelocityMovement
+    +double: yVelocityMovement
+    +double: xAccelerationVelocity
+    +double: yAccelerationVelocity
+    +double: aSinusAmplitude
+    +double: bSinusPeriodFactor
+    +boolean: presentInGame
+    +double: ySinusMovement: stores last amout of movement of sinus function, there to try to avoid conflict in boundary functions, though could be solved another way
+
+    int[]: getLocation():       gets location from thing as 1x2 Array
+    void: performAction(xMinusBoundary, xPlusBoundary, yMinusBoundary, yPlusBoundary): performs acntions defined through typeOfMovement
+    void: performSinusMovement(cycleCount, maxCycleCount)
+    void: performVelocityMovement():        will add velocityMovement to Location coordinates
+    void: performReflectionOnBoundary(int:      xMinusBoundary, int: xPlusBoundary, int y...): only considering one dimension; when thing reaches boundary: reverse direction
+    void: performTeleportOnBoundary(int:    xMinusBoundary, int: xPlusBoundary, int y...): considering one dimension; when thing reaches one boundary, teleport to other boundary
+
+            #perform...OnBoundary(): if statement triggered when sum of location and velocity greater(or smaller) or equal to boundary to avoid fsck up
+
+-Location:
+    int: xLocation
+    int: yLocation
+    bool: beyondPlain:      no use, could introduce second plane
+
+    moveBy(double xMoveby, double yMoveBy):      add ..MoveBy to Location coordinates
+    int[]: getLocation():       get Location as 1x2 Array
+    void: setX(int xSet):       set x coordinate
+    void: setY(int ySet):       set y coordinate
+    int: getX():        get x coordinate
+    int: getY():        get y coordinate
