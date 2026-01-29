@@ -17,10 +17,8 @@ public class Endscreen2 {
 
     private Background background;
     private Spielfeld spielfeld;
-    
+
     // Farbpaletten
-    private static final TextColor BG_GREEN = new TextColor.RGB(3, 5, 51);
-    
     private static final TextColor[] BLOOD_COLORS = {
         new TextColor.RGB(82, 13, 1),    // Dunkelrot
         new TextColor.RGB(120, 20, 2),
@@ -29,17 +27,7 @@ public class Endscreen2 {
         new TextColor.RGB(140, 23, 3),
         new TextColor.RGB(100, 16, 2)
     };
-    
-    // Hintergrund fÃ¼llen
-    public void zeichneHintergrund(Pixel[][] spielfeld) {
-        for (int x = 0; x < spielfeld.length; x++) {
-            for (int y = 0; y < spielfeld[0].length; y++) {
-                spielfeld[x][y].backColor = BG_GREEN;
-                spielfeld[x][y].Text = ' ';
-            }
-        }
-    }
-    
+
     // Buchstabe mit Blut-Effekt zeichnen (pulsierende Farbe + Tropfen)
     private void maleBuchstabeBlut(Pixel[][] spielfeld, int[][] pattern, int startX, int startY, boolean isOver) {
         for (int y = 0; y < pattern.length; y++) {
@@ -177,7 +165,6 @@ public class Endscreen2 {
                 if (startX + j < spielfeld.length && y < spielfeld[0].length) {
                     spielfeld[startX + j][y].Text = text.charAt(j);
                     spielfeld[startX + j][y].textColor = farbe;
-                    spielfeld[startX + j][y].backColor = BG_GREEN;
                 }
             }
             

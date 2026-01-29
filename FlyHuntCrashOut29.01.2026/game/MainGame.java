@@ -41,7 +41,7 @@ public class MainGame {
         Background background =new Background (pixelArtLibrary,0,0);
 
         Score scoreDisplay = new Score(105, 5, 8, pixelArtLibrary);
-        Health healthDisplay = new Health(6, 5, 12, 6, pixelArtLibrary);
+        Health healthDisplay = new Health(6, 5, 12, 2, pixelArtLibrary);
 
         // Reflecting fly
         targets.add(new Target(1, 30, 2, 0, 0, 0, 5, 1, 3, pixelArtLibrary, false));
@@ -61,7 +61,7 @@ public class MainGame {
 
         ((DefaultTerminalFactory) factory).setTerminalEmulatorFontConfiguration(
                 com.googlecode.lanterna.terminal.swing.SwingTerminalFontConfiguration.newInstance(
-                        new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 15)  // <-- Change terminal size
+                        new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 17)  // <-- Change terminal size
                 )
         );
         Terminal terminal = factory.createTerminal();
@@ -69,6 +69,36 @@ public class MainGame {
 
         // Initialize frog
         frog = new Frog(spielfeldBreite, spielfeldHoehe, pixelArtLibrary);
+
+        // *** Start Screen Loop *** courtesy of Maik Kiehlmann
+        Startscreen startscreen = new Startscreen(pixelArtLibrary);
+
+        boolean gameStarted = false;
+        while (!gameStarted){
+            // clear screen and create startscreen
+            spielfeld.clear();
+            background.drawBackground(spielfeld, 0, 0);
+            startscreen.zeichneLogo(spielfeld.getPixels());
+            startscreen.zeichneMenue(spielfeld.getPixels());
+            renderer.render(spielfeld);
+
+            //inout handling
+            KeyStroke key = terminal.pollInput();
+            if (key != null){
+                int result = startscreen.handleInput(key);
+                if (result == -1){  // ESC key -> exit game
+                    terminal.clearScreen();
+                    terminal.flush();
+                    terminal.close();
+                    return;
+                } else if (result == 2){    // ENTER -> start game
+                    gameStarted = true;
+                }
+            }
+            Thread.sleep(10);
+        }
+
+        // *** GAME START ***
 
         // Clear spielfeld to fix visual bugs during the first few frames
         spielfeld.clear();
@@ -88,7 +118,7 @@ public class MainGame {
             spielfeld.clear();
 
             // Draw Background
-            background.draw_Background(spielfeld,0 ,0);
+            background.drawBackground(spielfeld,0 ,0);
 
             if (healthDisplay.getCurrentHealth() > 0){
 
@@ -113,11 +143,26 @@ public class MainGame {
             } 
             else {
                 // Game over
-                for (Target target : targets) {
-                    target.drawFly(spielfeld);
-                }
-                scoreDisplay.setPosition(30, 15);
+                Endscreen2 endscreen = new Endscreen2();
+                background.drawEndscreen(spielfeld, 0, 0);
+                endscreen.zeichneLogo(spielfeld.getPixels());
+                endscreen.zeichneMenue(spielfeld.getPixels());
+                scoreDisplay.setPosition(55, 35);
                 scoreDisplay.draw(spielfeld);
+                renderer.render(spielfeld);
+                // input handling
+                KeyStroke endInput = terminal.pollInput();
+                if (endInput != null) {
+                    int endResult = endscreen.handleInput(endInput);
+                    if (endResult == -1) {  // ESC --> close game
+                        break;
+                    } else if (endResult == 1) {    // ENTER -> restart game
+                        main(args);
+                        return;
+                    }
+                }
+                // Thread.sleep(10);
+                continue;
             }
             // Check for input
             // Check for input

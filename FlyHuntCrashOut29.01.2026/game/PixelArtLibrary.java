@@ -185,9 +185,14 @@ public class PixelArtLibrary {
         TextColor[] backroundPalette = {
                 null,
                 TextColor.ANSI.BLUE_BRIGHT,
-                new TextColor.RGB(139, 69, 19),
-                TextColor.ANSI.GREEN 
-                
+                new TextColor.RGB(139, 69, 19), // brown
+                TextColor.ANSI.GREEN
+        };
+        TextColor[] endscreenPalette = {
+                null,
+                TextColor.ANSI.BLACK,
+                new TextColor.RGB(40, 26, 13),  // dark brown
+                new TextColor.RGB(0, 70, 0)     // dark green
         };
         int[][] backroundPattern = { // Breite 75 Höhe 75
         	//	 1  2  3  4  5  6  7  8  9  10 11 12 13 14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75
@@ -268,6 +273,7 @@ public class PixelArtLibrary {
                 {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,},//25
         };
         pixelArts.put("BACKGROUND", new PixelArt("Backround", backroundPattern, backroundPalette));
+        pixelArts.put("ENDSCREEN_BG", new PixelArt("Endscreen Background", backroundPattern, endscreenPalette));
    
         // FROG
         TextColor[] frogPalette = {

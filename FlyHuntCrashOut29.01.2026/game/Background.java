@@ -4,18 +4,21 @@ public class Background  {
 	private int startX;
     private int startY;
     private PixelArtLibrary pixelArtLibrary;
-	private PixelArt BackroundArt;
+	private PixelArt backroundArt;
+    private PixelArt endscreenArt;
 	
 	public Background(PixelArtLibrary pixelArtLibrary,int startX ,int startY) {
 		this.startX = startX;
         this.startY = startY;
         this.pixelArtLibrary = pixelArtLibrary;
-        BackroundArt = pixelArtLibrary.getPixelArt("BACKGROUND");
+        backroundArt = pixelArtLibrary.getPixelArt("BACKGROUND");
+        endscreenArt = pixelArtLibrary.getPixelArt("ENDSCREEN_BG");
 
 	}
-	public void draw_Background(Spielfeld spielfeld,int startX ,int startY){
-		
-		
-		spielfeld.drawPixelArt(BackroundArt, startX, startY);
+	public void drawBackground(Spielfeld spielfeld,int startX ,int startY){
+		spielfeld.drawPixelArt(backroundArt, startX, startY);
 	}
+    public void drawEndscreen(Spielfeld spielfeld,int startX ,int startY){
+        spielfeld.drawPixelArt(endscreenArt, startX, startY);
+    }
 }
