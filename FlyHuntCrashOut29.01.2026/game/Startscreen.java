@@ -7,7 +7,7 @@ import com.googlecode.lanterna.input.KeyType;
 
 public class Startscreen {
     private int selectedIndex = 1;
-    private final String[] options = {"[ ENTER, um das Spiel zu starten ]" , "[ ESC, um das Spiel zu verlassen ]"};
+    private final String[] options = {"[ ENTER – QUAK! ]" , "[ ESC – Nö, doch nicht... ]"};
     
     // Animation
     private int rainbowOffset = 0;
@@ -128,21 +128,21 @@ public class Startscreen {
     
     
     	//Frosch zeichnen
-    	int frogX = spielfeld.length - 140;
-    	int frogY = spielfeld[0].length - 35;
+    	int frogX = spielfeld.length - 145;
+    	int frogY = spielfeld[0].length - 18;
     	zeichneFrog(spielfeld, frogX, frogY);
     	
     	//Fliegen mit Animation zeichnen - jede bekommt einen Index für Phasenverschiebung
     	int flyX = spielfeld.length - 120;
-    	int flyY = spielfeld[0].length - 40;
+    	int flyY = spielfeld[0].length - 23;
     	zeichneFlyAnimated(spielfeld, flyX, flyY, 0);
     	
     	int fly2X = spielfeld.length - 140;
-    	int fly2Y = spielfeld[0].length - 45;
+    	int fly2Y = spielfeld[0].length - 28;
     	zeichneFlyAnimated(spielfeld, fly2X, fly2Y, 1);
     	
     	int fly3X = spielfeld.length - 130;
-    	int fly3Y = spielfeld[0].length - 55;
+    	int fly3Y = spielfeld[0].length - 35;
     	zeichneFlyAnimated(spielfeld, fly3X, fly3Y, 2);
     	
     	
@@ -186,20 +186,22 @@ public class Startscreen {
             }
         }
     }
-    
-    // Biene unten rechts zeichnen
+    // Biene unten rechts zeichnen mit Animation
     public void zeichneBiene(Pixel[][] spielfeld, int startX, int startY) {
         int[][] pattern = Animals.BEE;
         TextColor[] colors = AnimalColor.BEE;
+        
+        // Hole den Y-Offset von der Animation in AnimalColor
+        int yOffset = AnimalColor.getBeeYOffset();
        
         for (int y = 0; y < pattern.length; y++) {
             for (int x = 0; x < pattern[y].length; x++) {
                 int colorIndex = pattern[y][x];
                 if (colorIndex > 0) {
                     TextColor farbe = colors[colorIndex - 1];
-                    // Doppelte Breite für quadratischen Effekt
-                    setBlock(spielfeld, startX + (x * 2), startY + y, farbe);
-                    setBlock(spielfeld, startX + (x * 2) + 1, startY + y, farbe);
+                    // Doppelte Breite für quadratischen Effekt + Y-Offset für Animation
+                    setBlock(spielfeld, startX + (x * 2), startY + y + yOffset, farbe);
+                    setBlock(spielfeld, startX + (x * 2) + 1, startY + y + yOffset, farbe);
                 }
             }
         }

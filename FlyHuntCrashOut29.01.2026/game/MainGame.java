@@ -61,7 +61,7 @@ public class MainGame {
 
         ((DefaultTerminalFactory) factory).setTerminalEmulatorFontConfiguration(
                 com.googlecode.lanterna.terminal.swing.SwingTerminalFontConfiguration.newInstance(
-                        new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 17)  // <-- Change terminal size
+                        new java.awt.Font("Monospaced", java.awt.Font.PLAIN, 9)  // <-- Change terminal size
                 )
         );
         Terminal terminal = factory.createTerminal();
@@ -142,27 +142,35 @@ public class MainGame {
 
             } 
             else {
-                // Game over
+                // Game over - Endscreen Loop
                 Endscreen2 endscreen = new Endscreen2();
-                background.drawEndscreen(spielfeld, 0, 0);
-                endscreen.zeichneLogo(spielfeld.getPixels());
-                endscreen.zeichneMenue(spielfeld.getPixels());
-                scoreDisplay.setPosition(55, 35);
-                scoreDisplay.draw(spielfeld);
-                renderer.render(spielfeld);
-                // input handling
-                KeyStroke endInput = terminal.pollInput();
-                if (endInput != null) {
-                    int endResult = endscreen.handleInput(endInput);
-                    if (endResult == -1) {  // ESC --> close game
-                        break;
-                    } else if (endResult == 1) {    // ENTER -> restart game
-                        main(args);
-                        return;
+                
+                while (true) {
+                    spielfeld.clear();
+                    background.drawEndscreen(spielfeld, 0, 0);
+                    endscreen.updateAnimation();  
+                    endscreen.zeichneLogo(spielfeld.getPixels());
+                    endscreen.zeichneMenue(spielfeld.getPixels());
+                    scoreDisplay.setPosition(55, 35);
+                    scoreDisplay.draw(spielfeld);
+                    renderer.render(spielfeld);
+                    
+                    // input handling
+                    KeyStroke endInput = terminal.pollInput();
+                    if (endInput != null) {
+                        int endResult = endscreen.handleInput(endInput);
+                        if (endResult == -1) {  // ESC --> close game
+                            terminal.clearScreen();
+                            terminal.flush();
+                            terminal.close();
+                            return;
+                        } else if (endResult == 1) {    // ENTER -> restart game
+                            main(args);
+                            return;
+                        }
                     }
+                    Thread.sleep(10);
                 }
-                // Thread.sleep(10);
-                continue;
             }
             // Check for input
             // Check for input
